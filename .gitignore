@@ -38,3 +38,6 @@ next-env.d.ts
 #products
 /products
 /public/products
+
+# ENV
+.env

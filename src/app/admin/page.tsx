@@ -32,16 +32,10 @@ async function getSalesData() {
     _count: true,
   });
 
-  await wait(5000);
-
   return {
     amount: (data._sum.pricePaidInCents || 0) / 100,
     numberOfSales: data._count,
   };
-}
-
-function wait(duration: number) {
-  return new Promise((resolve) => setTimeout(resolve, duration));
 }
 
 async function getProductData() {

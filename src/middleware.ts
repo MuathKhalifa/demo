@@ -21,9 +21,14 @@ async function isAuthenticated(req: NextRequest) {
     .split(":"); //decrepting the values and spliting username and password
 
   isValidPassword(password, "password");
-
-  return false;
-  // return username === process.env.ADMIN_USERNAME && (await isValidPassword(password, process.env.HASHED_ADMIN_PASSWORD as string))
+  // this returns true, if the login in ADMIN_USERNAME and entered password is equal to haspassword
+  return (
+    username === process.env.ADMIN_USERNAME &&
+    (await isValidPassword(
+      password,
+      process.env.HASHED_ADMIN_PASSWORD as string
+    ))
+  );
 
   console.log("username: ", username, "password: ", password, "authheadre: ");
 }
