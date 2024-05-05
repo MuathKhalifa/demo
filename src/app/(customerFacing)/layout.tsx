@@ -9,7 +9,7 @@ export default function Layout({
   return (
     <>
       <Nav>
-        <NavLink href="/admin">Home</NavLink>
+        <NavLink href="/">Home</NavLink>
         <NavLink href="/products">Products</NavLink>
         <NavLink href="/order">My orders</NavLink>
       </Nav>
