@@ -1,28 +1,18 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
+import { useParams } from "next/navigation";
 
 export async function GET(
   req: NextRequest,
   {
     params: { downloadVerificationId },
-  }: {
-    params: { downloadVerificationId: string };
-  }
+  }: { params: { downloadVerificationId: string } }
 ) {
-  const data = db.downloadVerification.findUnique({
-    where: {
-      id: downloadVerificationId,
-      expiresAt: { gt: new Date() },
-    },
-    select: {
-      product: {
-        select: {
-          filePath: true,
-          name: true,
-        },
-      },
-    },
+  console.log("VERification id: ", req.body);
+  const data = await db.downloadVerification.findUnique({
+    where: { id: downloadVerificationId, expiresAt: { gt: new Date() } },
+    select: { product: { select: { filePath: true, name: true } } },
   });
 
   if (data == null) {
@@ -31,18 +21,14 @@ export async function GET(
     );
   }
 
-  const { size } = await fs.stat(product.filePath);
-  const file = await fs.readFile(product.filePath);
-  //return file extension
-  const extension = await product.filePath.split(".").pop();
-
-  console.log("extension: ", extension);
+  const { size } = await fs.stat(data.product.filePath);
+  const file = await fs.readFile(data.product.filePath);
+  const extension = data.product.filePath.split(".").pop();
 
   return new NextResponse(file, {
     headers: {
-      "Content-Disposition": `attachment; filename="${product.name}.${extension}"`,
+      "Content-Disposition": `attachment; filename="${data.product.name}.${extension}"`,
       "Content-Length": size.toString(),
     },
   });
-  return new NextResponse("Hi");
 }

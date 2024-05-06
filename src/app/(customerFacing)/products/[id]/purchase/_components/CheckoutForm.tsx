@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { userOrderExists } from "../../actions/orders";
+import { userOrderExists } from "@/app/actions/orders";
 
 const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string);
 type CheckoutFormProps = {
