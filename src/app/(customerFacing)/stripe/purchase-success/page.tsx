@@ -13,16 +13,23 @@ export default async function SuccessPage({
 }: {
   searchParams: { payment_intent: string };
 }) {
+  // params embedded by stripes to the url
   const paymentIntent = await stripe.paymentIntents.retrieve(
     searchParams.payment_intent
   );
+
+  // check payment has the right metadata
   if (paymentIntent.metadata.productId == null) return notFound();
 
+  // find the product the was just bought, uising the metadata productId
   const product = await db.product.findUnique({
     where: { id: paymentIntent.metadata.productId },
   });
+
+  // return if product is not found
   if (product == null) return notFound();
 
+  // if the payment Intent was confirmed, i.e. buyer paid succefully.
   const isSuccess = paymentIntent.status === "succeeded";
 
   return (

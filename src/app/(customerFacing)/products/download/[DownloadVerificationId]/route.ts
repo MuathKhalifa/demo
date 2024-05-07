@@ -1,7 +1,6 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
-import { useParams } from "next/navigation";
 
 export async function GET(
   req: NextRequest,
@@ -9,7 +8,6 @@ export async function GET(
     params: { downloadVerificationId },
   }: { params: { downloadVerificationId: string } }
 ) {
-  console.log("VERification id: ", req.body);
   const data = await db.downloadVerification.findUnique({
     where: { id: downloadVerificationId, expiresAt: { gt: new Date() } },
     select: { product: { select: { filePath: true, name: true } } },
@@ -20,6 +18,8 @@ export async function GET(
       new URL("/products/download/expired", req.url)
     );
   }
+
+  // download link for the item just bought
 
   const { size } = await fs.stat(data.product.filePath);
   const file = await fs.readFile(data.product.filePath);

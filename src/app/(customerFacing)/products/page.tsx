@@ -1,20 +1,16 @@
 import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
-import { Suspense } from "react";
-import { ProductSuspense } from "../page";
 import db from "@/db/db";
+import { cache } from "@/lib/cache";
+import { Suspense } from "react";
 
-function getProducts() {
+const getProducts = cache(() => {
   return db.product.findMany({
-    where: {
-      isAvailableForPurchase: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
+    where: { isAvailableForPurchase: true },
+    orderBy: { name: "asc" },
   });
-}
+}, ["/products", "getProducts"]);
 
-export default function productPage() {
+export default function ProductsPage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <Suspense
@@ -29,13 +25,13 @@ export default function productPage() {
           </>
         }
       >
-        <ProductsSuspence />
+        <ProductsSuspense />
       </Suspense>
     </div>
   );
 }
 
-async function ProductsSuspence() {
+async function ProductsSuspense() {
   const products = await getProducts();
 
   return products.map((product) => (
