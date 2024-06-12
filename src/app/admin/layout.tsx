@@ -1,6 +1,5 @@
 import { Nav, NavLink } from "@/components/Nav";
-
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";// force nextjs to not cache anypage
 
 export default function AdminLayout({
   children,
@@ -10,7 +9,7 @@ export default function AdminLayout({
   return (
     <>
       <Nav>
-        <NavLink href="/admin">Dashboard</NavLink>
+        <NavLink  href="/admin">Dashboard</NavLink>
         <NavLink href="/admin/products">Products</NavLink>
         <NavLink href="/admin/users">Customers</NavLink>
         <NavLink href="/admin/orders">Sales</NavLink>
